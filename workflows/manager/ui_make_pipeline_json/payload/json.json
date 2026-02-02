@@ -1,0 +1,278 @@
+{
+    "name": "kilroy.ui_agent_template/manager/ui_make_pipeline_json",
+    "version": "1",
+    "description": "",
+    "isInteractive": true,
+    "clean_up": true,
+    "inputs": [],
+    "outputs": [
+        "msg"
+    ],
+    "args": {
+        "role": "*"
+    },
+    "steps": [
+        {
+            "operation": "set_value",
+            "isServer": true,
+            "args": {
+                "variable": "wfCleanupFlag",
+                "value": "1"
+            }
+        },
+        {
+            "operation": "step_group",
+            "isServer": true,
+            "args": {
+                "role": "*",
+                "message": "",
+                "timer": "24",
+                "isInteractive": true,
+                "canTerminate": true,
+                "success": [
+                    {
+                        "operation": "display_inline_form",
+                        "isServer": false,
+                        "args": {
+                            "formID": "default",
+                            "form": {
+                                "formPanels": [
+                                    {
+                                        "name": "Enter agent aliases in pipeline:",
+                                        "description": "",
+                                        "sections": [
+                                            {
+                                                "fields": [
+                                                    {
+                                                        "name": "pipeline_id",
+                                                        "type": "text",
+                                                        "label": "Pipeline ID",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "aliases",
+                                                        "type": "repeating_text",
+                                                        "label": "Aliases",
+                                                        "placeholder": "kilroy.ai.some_agent_alias"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            "success": [
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "alen",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "array_length",
+                                            "arg": "aliases"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "list_reset",
+                                    "isServer": true,
+                                    "args": {
+                                        "list_name": "agents"
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "pipeline",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "value",
+                                            "arg": {}
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "pipeline",
+                                        "push_array_name": null,
+                                        "field_name": "pipeline_id",
+                                        "var_expr": {
+                                            "type": "variable",
+                                            "arg": "pipeline_id"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "while_loop",
+                                    "isServer": true,
+                                    "args": {
+                                        "condition": "${alen}>0",
+                                        "success": [
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "id",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "array_shift",
+                                                        "arg": "aliases"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "trigger_pd",
+                                                "isServer": true,
+                                                "args": {
+                                                    "pd_id": "${id}",
+                                                    "trigger_name": "get_config",
+                                                    "sync": true,
+                                                    "copyOutputs": false,
+                                                    "args": "{}"
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": null,
+                                                    "push_array_name": "agents",
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "results",
+                                                        "arg": "__results__"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "alen",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "math",
+                                                        "operator": "subtract",
+                                                        "op_1": {
+                                                            "type": "variable",
+                                                            "arg": "alen"
+                                                        },
+                                                        "op_2": {
+                                                            "type": "value",
+                                                            "arg": "1"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "failure": []
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "pipeline",
+                                        "push_array_name": null,
+                                        "field_name": "agents",
+                                        "var_expr": {
+                                            "type": "variable",
+                                            "arg": "agents"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "formData",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "value",
+                                            "arg": {}
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "msg",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "json_string",
+                                            "arg": {
+                                                "type": "variable",
+                                                "arg": "pipeline"
+                                            },
+                                            "formatted": true
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "formData",
+                                        "push_array_name": null,
+                                        "field_name": "json",
+                                        "var_expr": {
+                                            "type": "variable",
+                                            "arg": "msg"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "display_inline_form",
+                                    "isServer": false,
+                                    "args": {
+                                        "formID": "default",
+                                        "form": {
+                                            "formPanels": [
+                                                {
+                                                    "name": "Review/Copy the pipeline JSON:",
+                                                    "description": "",
+                                                    "sections": [
+                                                        {
+                                                            "fields": [
+                                                                {
+                                                                    "name": "json",
+                                                                    "type": "textarea",
+                                                                    "label": "Pipeline JSON",
+                                                                    "placeholder": ""
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "success": [],
+                                        "failure": []
+                                    }
+                                }
+                            ],
+                            "failure": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "end",
+            "isServer": true,
+            "args": null
+        }
+    ],
+    "externalForms": {}
+}

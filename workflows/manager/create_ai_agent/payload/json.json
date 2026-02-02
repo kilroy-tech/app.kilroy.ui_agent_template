@@ -1,0 +1,192 @@
+{
+    "name": "kilroy.ui_agent_template/manager/create_ai_agent",
+    "version": "1",
+    "description": "",
+    "isInteractive": false,
+    "clean_up": true,
+    "inputs": [],
+    "outputs": [
+        "msg"
+    ],
+    "args": {
+        "role": "*"
+    },
+    "steps": [
+        {
+            "operation": "set_value",
+            "isServer": true,
+            "args": {
+                "variable": "wfCleanupFlag",
+                "value": "1"
+            }
+        },
+        {
+            "operation": "step_group",
+            "isServer": true,
+            "args": {
+                "role": "*",
+                "message": "",
+                "timer": "24",
+                "isInteractive": false,
+                "canTerminate": false,
+                "success": [
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "data",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "webhook_args"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "args",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "object",
+                                "arg": "data",
+                                "field_name": "args"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "message",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "array_shift",
+                                "arg": "args"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "json",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "json",
+                                "arg": {
+                                    "type": "object",
+                                    "arg": "message",
+                                    "field_name": "text"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "agent_parent_id",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "object",
+                                "arg": "json",
+                                "field_name": "agent_parent_id"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "agent_name",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "object",
+                                "arg": "json",
+                                "field_name": "agent_name"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "agent_desc",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "object",
+                                "arg": "json",
+                                "field_name": "agent_desc"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "desc",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "value",
+                                "arg": "(${agent_parent_id}) AI ${agent_name}: ${agent_desc}"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "app_services",
+                        "isServer": true,
+                        "args": {
+                            "cmd": "start_app_diagram",
+                            "pdclass": "ai_agent",
+                            "pdalias": "",
+                            "pddesc": "${desc}",
+                            "pdargs": "{\"config\": ${json} }"
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "res",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "results",
+                                "arg": "__results__"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "msg",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "value",
+                                "arg": "${res}: ${desc}"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "end",
+            "isServer": true,
+            "args": null
+        }
+    ],
+    "externalForms": {}
+}

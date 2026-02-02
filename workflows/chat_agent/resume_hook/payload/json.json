@@ -1,0 +1,137 @@
+{
+    "name": "kilroy.ui_agent_template/wf_agent/chat/resume_hook",
+    "version": "1",
+    "description": "",
+    "isInteractive": false,
+    "clean_up": true,
+    "inputs": [],
+    "outputs": [
+        "cmsg",
+        "swarm_*"
+    ],
+    "args": {
+        "role": "*"
+    },
+    "steps": [
+        {
+            "operation": "set_value",
+            "isServer": true,
+            "args": {
+                "variable": "wfCleanupFlag",
+                "value": "1"
+            }
+        },
+        {
+            "operation": "step_group",
+            "isServer": true,
+            "args": {
+                "role": "*",
+                "message": "",
+                "timer": "24",
+                "isInteractive": false,
+                "canTerminate": false,
+                "success": [
+                    {
+                        "operation": "if_then_else",
+                        "isServer": true,
+                        "args": {
+                            "condition": "\"${inject_sub_swarm}\" != \"${inject_pub_swarm}\"",
+                            "success": [
+                                {
+                                    "operation": "if_then_else",
+                                    "isServer": true,
+                                    "args": {
+                                        "condition": "\"${inject_pub_swarm}\" != \"\"",
+                                        "success": [
+                                            {
+                                                "operation": "swarm_command",
+                                                "isServer": true,
+                                                "args": {
+                                                    "command": "join",
+                                                    "command_args": {
+                                                        "topic": "${inject_pub_swarm}",
+                                                        "alias": "${pd_alias}",
+                                                        "webhook": "publish_swarm_hook",
+                                                        "seed": ""
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "failure": []
+                                    }
+                                }
+                            ],
+                            "failure": []
+                        }
+                    },
+                    {
+                        "operation": "if_then_else",
+                        "isServer": true,
+                        "args": {
+                            "condition": "\"${inject_sub_swarm}\" != \"\"",
+                            "success": [
+                                {
+                                    "operation": "swarm_command",
+                                    "isServer": true,
+                                    "args": {
+                                        "command": "join",
+                                        "command_args": {
+                                            "topic": "${inject_sub_swarm}",
+                                            "alias": "${pd_alias}",
+                                            "webhook": "swarm_hook",
+                                            "seed": ""
+                                        }
+                                    }
+                                }
+                            ],
+                            "failure": []
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "swarm_connected",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "value",
+                                "arg": true
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_value",
+                        "isServer": true,
+                        "args": {
+                            "variable": "swarm_connected_msg",
+                            "value": "Connected"
+                        }
+                    },
+                    {
+                        "operation": "set_value",
+                        "isServer": true,
+                        "args": {
+                            "variable": "swarm_connected_color",
+                            "value": "#00FF00"
+                        }
+                    },
+                    {
+                        "operation": "set_value",
+                        "isServer": true,
+                        "args": {
+                            "variable": "cmsg",
+                            "value": "Connected to swarm ${swarm_name}!"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "end",
+            "isServer": true,
+            "args": null
+        }
+    ],
+    "externalForms": {}
+}

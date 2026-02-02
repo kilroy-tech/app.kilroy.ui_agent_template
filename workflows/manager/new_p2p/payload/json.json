@@ -1,0 +1,94 @@
+{
+    "name": "kilroy.ui_agent_template/manager/new_p2p",
+    "version": "1",
+    "description": "",
+    "isInteractive": true,
+    "clean_up": true,
+    "inputs": [],
+    "outputs": [],
+    "args": {
+        "role": "*"
+    },
+    "steps": [
+        {
+            "operation": "set_value",
+            "isServer": true,
+            "args": {
+                "variable": "wfCleanupFlag",
+                "value": "1"
+            }
+        },
+        {
+            "operation": "step_group",
+            "isServer": true,
+            "args": {
+                "role": "*",
+                "message": "",
+                "timer": "24",
+                "isInteractive": true,
+                "canTerminate": true,
+                "success": [
+                    {
+                        "operation": "display_inline_form",
+                        "isServer": false,
+                        "args": {
+                            "formID": "default",
+                            "form": {
+                                "formPanels": [
+                                    {
+                                        "name": "Enter new AI P2P swarm info:",
+                                        "description": "",
+                                        "sections": [
+                                            {
+                                                "fields": [
+                                                    {
+                                                        "name": "bot_name",
+                                                        "type": "text",
+                                                        "label": "AI Bot Name",
+                                                        "placeholder": "simple_name_here"
+                                                    },
+                                                    {
+                                                        "name": "desc",
+                                                        "type": "text",
+                                                        "label": "Description",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "room_id",
+                                                        "type": "text",
+                                                        "label": "Room ID",
+                                                        "placeholder": ""
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            "success": [
+                                {
+                                    "operation": "app_services",
+                                    "isServer": true,
+                                    "args": {
+                                        "cmd": "start_app_diagram",
+                                        "pdclass": "p2p",
+                                        "pdalias": "",
+                                        "pddesc": "${desc}",
+                                        "pdargs": "{\"description\":\"${desc}\",\"room_id\":\"${room_id}\",\"bot_name\":\"${bot_name}\"}"
+                                    }
+                                }
+                            ],
+                            "failure": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "end",
+            "isServer": true,
+            "args": null
+        }
+    ],
+    "externalForms": {}
+}

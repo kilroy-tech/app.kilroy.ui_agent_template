@@ -1,0 +1,122 @@
+:root {
+    --inset-bg-dark-color: #444;
+    --inset-bg-light-color: #CCC;
+    --inset-bg-color: var(--inset-bg-dark-color);
+    --md-link-dark-color: #2e58cc;
+    --md-link-light-color: #1a0dab;
+    --md-link-color: var(--md-link-dark-color);
+}
+
+.kilroy-markdown {
+    margin:0;
+    padding:0;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    white-space: normal;
+}
+
+.kilroy-markdown pre,
+.kilroy-markdown code {
+  font-family: Menlo, Monaco, "Courier New", monospace;
+}
+
+.kilroy-markdown pre {
+  padding: .5rem;
+  line-height: 1.25;
+  overflow-x: scroll;
+}
+
+.kilroy-markdown a,
+.kilroy-markdown a:visited {
+  color: var(--md-link-color);
+}
+
+.kilroy-markdown a:hover,
+.kilroy-markdown a:focus,
+.kilroy-markdown a:active {
+  color: var(--md-link-color);
+}
+
+.retro-no-decoration {
+  text-decoration: none;
+}
+
+.kilroy-markdown p,
+.retro-p {
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+.kilroy-markdown h1,
+.retro-h1,
+.kilroy-markdown h2,
+.retro-h2,
+.kilroy-markdown h3,
+.retro-h3,
+.kilroy-markdown h4,
+.retro-h4 {
+  margin: 1.414rem 0 .5rem;
+  font-weight: inherit;
+  line-height: 1.42;
+}
+
+.kilroy-markdown h1,
+.retro-h1 {
+  margin-top: 0;
+  font-size: 3rem;
+}
+
+.kilroy-markdown h2,
+.retro-h2 {
+  font-size: 2rem;
+}
+
+.kilroy-markdown h3,
+.retro-h3 {
+  font-size: 1.5rem;
+}
+
+.kilroy-markdown h4,
+.retro-h4 {
+  font-size: 1.414rem;
+}
+
+.kilroy-markdown h5,
+.retro-h5 {
+  font-size: 1.121rem;
+}
+.retro-h5 {
+  font-size: 1.121rem;
+}
+
+.kilroy-markdown h6,
+.retro-h6 {
+  font-size: .88rem;
+}
+
+.kilroy-markdown small,
+.retro-small {
+  font-size: .707em;
+}
+
+/* https://github.com/mrmrs/fluidity */
+
+.kilroy-markdown img,
+.kilroy-markdown canvas,
+.kilroy-markdown iframe,
+.kilroy-markdown video,
+.kilroy-markdown svg,
+.kilroy-markdown select,
+.kilroy-markdown textarea {
+  max-width: 100%;
+}
+
+.kilroy-markdown pre {
+  background-color: var(--inset-bg-color);
+}
+
+.kilroy-markdown blockquote {
+  border-left: 3px solid #2e58cc;
+  padding-left: 1rem;
+}

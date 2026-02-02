@@ -1,0 +1,40 @@
+{
+    "manifestVersion": 2,
+    "id"            : "kilroy.ui_agent_template",
+    "displayName"   : "Kilroy UI Agent Template",
+    "desc"          : "Kilroy UI Agent Template Application",
+    "version"       : "1.0",
+    "author"        : "Kilroy BC, LLC",
+    "authorInfoUrl" : "http://kilroy.tech",
+    "appInfoUrl"    : "/apps/kilroy.ui_agent_template/index.html",
+    "appImageUrl"   : "/apps/kilroy.ui_agent_template/images/kilroy.svg",
+    "locked"        : true,
+    "override"      : true,
+    "hidden"        : false,
+    "pdClasses"     : {
+        "manager"    : {
+            "pdName" : "manager",
+            "pdAlias": "kilroy.ui_agent_template.manager",
+            "desc"  : "  Chat Agent Manager",
+            "runOnStart": true,
+            "visible": true,
+            "multipleAllowed": false,
+            "init"  : "init_hook",
+            "resume": "resume_hook",
+            "pause" : "pause_hook",
+            "stop"  : "stop_hook"
+        },
+        "chat_agent"    : {
+            "pdName" : "chat_agent",
+            "pdAlias": "kilroy.ui_agent_template.chat_agent",
+            "desc"  : "Chat",
+            "runOnStart": false,
+            "visible": true,
+            "multipleAllowed": true,
+            "init"  : "init_hook",
+            "resume": "resume_hook",
+            "pause" : "pause_hook",
+            "stop"  : "stop_hook"
+        }
+    }
+}

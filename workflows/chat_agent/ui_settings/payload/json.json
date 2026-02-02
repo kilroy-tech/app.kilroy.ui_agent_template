@@ -1,0 +1,191 @@
+{
+    "name": "kilroy.ui_agent_template/chat_agent/ui_settings",
+    "version": "1",
+    "description": "",
+    "isInteractive": true,
+    "clean_up": true,
+    "inputs": [],
+    "outputs": [
+        "ta_.*",
+        "agent_.*",
+        "wf_.*",
+        "ex_.*"
+    ],
+    "args": {
+        "role": "*"
+    },
+    "steps": [
+        {
+            "operation": "set_value",
+            "isServer": true,
+            "args": {
+                "variable": "wfCleanupFlag",
+                "value": "1"
+            }
+        },
+        {
+            "operation": "step_group",
+            "isServer": true,
+            "args": {
+                "role": "*",
+                "message": "",
+                "timer": "24",
+                "isInteractive": true,
+                "canTerminate": true,
+                "success": [
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "ta_config"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "display_inline_form",
+                        "isServer": false,
+                        "args": {
+                            "formID": "default",
+                            "form": {
+                                "formPanels": [
+                                    {
+                                        "name": "Configure Chat...",
+                                        "description": "",
+                                        "sections": [
+                                            {
+                                                "fields": [
+                                                    {
+                                                        "name": "agent_name",
+                                                        "type": "text",
+                                                        "label": "Viewer Name",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_desc",
+                                                        "type": "text",
+                                                        "label": "Viewer Description",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_style",
+                                                        "type": "dropdown",
+                                                        "label": "Style",
+                                                        "pairs_as_string": true,
+                                                        "pairs": "[  {\"name\" : \"Light\", \"value\" : 0 },{\"name\" : \"Dark\", \"value\" : 1 },{\"name\" : \"Dim\", \"value\" : 2 },{\"name\" : \"Blueprint\", \"value\" : 3 }]"
+                                                    },
+                                                    {
+                                                        "name": "agent_width",
+                                                        "type": "text",
+                                                        "label": "Viewer Width (>=256)",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_height",
+                                                        "type": "text",
+                                                        "label": "Viewer Height (>=128)",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_rec_swarm",
+                                                        "type": "text",
+                                                        "label": "Swarm to subscribe to",
+                                                        "placeholder": "swarm_name"
+                                                    },
+                                                    {
+                                                        "name": "agent_from",
+                                                        "type": "text",
+                                                        "label": "Agent Name to listen for",
+                                                        "placeholder": "some_agent_name"
+                                                    },
+                                                    {
+                                                        "name": "agent_send_swarm",
+                                                        "type": "text",
+                                                        "label": "Swarm to publish to",
+                                                        "placeholder": "swarm_name"
+                                                    },
+                                                    {
+                                                        "name": "wf_agent_name",
+                                                        "type": "text",
+                                                        "label": "Agent to masquerade as",
+                                                        "placeholder": "some_agent_name"
+                                                    },
+                                                    {
+                                                        "name": "wf_username",
+                                                        "type": "text",
+                                                        "label": "Username to masquerade as in messages",
+                                                        "placeholder": "some_agent_name"
+                                                    },
+                                                    {
+                                                        "name": "wf_webhook_args",
+                                                        "type": "textarea",
+                                                        "label": "Webhook Args",
+                                                        "placeholder": ""
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            "success": [
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "ta_config",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "results",
+                                            "arg": "__results__"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "sconfig",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "json_string",
+                                            "arg": {
+                                                "type": "variable",
+                                                "arg": "ta_config"
+                                            },
+                                            "formatted": false
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "trigger_pd",
+                                    "isServer": true,
+                                    "args": {
+                                        "pd_id": "${process_diagram_id}",
+                                        "trigger_name": "set_config",
+                                        "sync": true,
+                                        "copyOutputs": true,
+                                        "args": "${sconfig}"
+                                    }
+                                }
+                            ],
+                            "failure": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "end",
+            "isServer": true,
+            "args": null
+        }
+    ],
+    "externalForms": {}
+}

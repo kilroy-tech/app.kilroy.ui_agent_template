@@ -1,0 +1,185 @@
+{
+    "name": "kilroy.ui_agent_template/chat_agent/init_hook",
+    "version": "1",
+    "description": "",
+    "isInteractive": false,
+    "clean_up": true,
+    "inputs": [],
+    "outputs": [
+        "pd_alias",
+        "ai_*",
+        "inject_*",
+        "swarm_*",
+        "wf_*",
+        "ex_*"
+    ],
+    "args": {
+        "role": "*"
+    },
+    "steps": [
+        {
+            "operation": "set_value",
+            "isServer": true,
+            "args": {
+                "variable": "wfCleanupFlag",
+                "value": "1"
+            }
+        },
+        {
+            "operation": "step_group",
+            "isServer": true,
+            "args": {
+                "role": "*",
+                "message": "",
+                "timer": "24",
+                "isInteractive": false,
+                "canTerminate": false,
+                "success": [
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "pd_alias",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "object",
+                                "arg": "webhook_args",
+                                "field_name": "alias"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "tconfig",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "object",
+                                "arg": "webhook_args",
+                                "field_name": "config"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "trigger_pd",
+                        "isServer": true,
+                        "args": {
+                            "pd_id": "${process_diagram_id}",
+                            "trigger_name": "set_config",
+                            "sync": true,
+                            "copyOutputs": true,
+                            "args": "${tconfig}"
+                        }
+                    },
+                    {
+                        "operation": "if_then_else",
+                        "isServer": true,
+                        "args": {
+                            "condition": "\"${inject_sub_swarm}\" != \"${inject_pub_swarm}\"",
+                            "success": [
+                                {
+                                    "operation": "if_then_else",
+                                    "isServer": true,
+                                    "args": {
+                                        "condition": "\"${inject_pub_swarm}\" != \"\"",
+                                        "success": [
+                                            {
+                                                "operation": "swarm_command",
+                                                "isServer": true,
+                                                "args": {
+                                                    "command": "join",
+                                                    "command_args": {
+                                                        "topic": "${inject_pub_swarm}",
+                                                        "alias": "${pd_alias}",
+                                                        "webhook": "publish_swarm_hook",
+                                                        "seed": ""
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "failure": []
+                                    }
+                                }
+                            ],
+                            "failure": []
+                        }
+                    },
+                    {
+                        "operation": "if_then_else",
+                        "isServer": true,
+                        "args": {
+                            "condition": "\"${inject_sub_swarm}\" != \"\"",
+                            "success": [
+                                {
+                                    "operation": "swarm_command",
+                                    "isServer": true,
+                                    "args": {
+                                        "command": "join",
+                                        "command_args": {
+                                            "topic": "${inject_sub_swarm}",
+                                            "alias": "${pd_alias}",
+                                            "webhook": "swarm_hook",
+                                            "seed": ""
+                                        }
+                                    }
+                                }
+                            ],
+                            "failure": []
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "swarm_connected",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "value",
+                                "arg": true
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_value",
+                        "isServer": true,
+                        "args": {
+                            "variable": "swarm_connected_msg",
+                            "value": "Connected"
+                        }
+                    },
+                    {
+                        "operation": "set_value",
+                        "isServer": true,
+                        "args": {
+                            "variable": "swarm_connected_color",
+                            "value": "#00FF00"
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "inject_text",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "value",
+                                "arg": ""
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "end",
+            "isServer": true,
+            "args": null
+        }
+    ],
+    "externalForms": {}
+}

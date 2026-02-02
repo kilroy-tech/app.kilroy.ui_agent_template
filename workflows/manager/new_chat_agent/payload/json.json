@@ -1,0 +1,258 @@
+{
+    "name": "kilroy.ui_agent_template/manager/new_chat_agent",
+    "version": "1",
+    "description": "",
+    "isInteractive": true,
+    "clean_up": true,
+    "inputs": [],
+    "outputs": [
+        "agent_*",
+        "wf_*",
+        "ex_*"
+    ],
+    "args": {
+        "role": "*"
+    },
+    "steps": [
+        {
+            "operation": "set_value",
+            "isServer": true,
+            "args": {
+                "variable": "wfCleanupFlag",
+                "value": "1"
+            }
+        },
+        {
+            "operation": "step_group",
+            "isServer": true,
+            "args": {
+                "role": "*",
+                "message": "",
+                "timer": "24",
+                "isInteractive": true,
+                "canTerminate": true,
+                "success": [
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "value",
+                                "arg": {}
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_parent_id",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "agent_parent_id"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_style",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "ex_style"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_width",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "agent_width"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_height",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "agent_chat_height"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "display_inline_form",
+                        "isServer": false,
+                        "args": {
+                            "formID": "default",
+                            "form": {
+                                "formName": "Chat Agent Settings",
+                                "formDesc": "",
+                                "formPanels": [
+                                    {
+                                        "name": "Agent Info",
+                                        "description": "",
+                                        "sections": [
+                                            {
+                                                "fields": [
+                                                    {
+                                                        "name": "agent_name",
+                                                        "type": "text",
+                                                        "label": "Chat Agent Name",
+                                                        "placeholder": "simple_name_here"
+                                                    },
+                                                    {
+                                                        "name": "agent_desc",
+                                                        "type": "text",
+                                                        "label": "Description",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_style",
+                                                        "type": "dropdown",
+                                                        "label": "Style",
+                                                        "pairs_as_string": true,
+                                                        "pairs": "[  {\"name\" : \"Light\", \"value\" : 0 },{\"name\" : \"Dark\", \"value\" : 1 },{\"name\" : \"Dim\", \"value\" : 2 },{\"name\" : \"Blueprint\", \"value\" : 3 }]"
+                                                    },
+                                                    {
+                                                        "name": "agent_width",
+                                                        "type": "text",
+                                                        "label": "Viewer Width (>=256)",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_height",
+                                                        "type": "text",
+                                                        "label": "Viewer Height (>=128)",
+                                                        "placeholder": ""
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "Chat Info",
+                                        "description": "",
+                                        "sections": [
+                                            {
+                                                "fields": [
+                                                    {
+                                                        "name": "agent_rec_swarm",
+                                                        "type": "text",
+                                                        "label": "Listen to Swarm Name",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_from",
+                                                        "type": "text",
+                                                        "label": "Agent to Listen To",
+                                                        "placeholder": "from_agent"
+                                                    },
+                                                    {
+                                                        "name": "agent_send_swarm",
+                                                        "type": "text",
+                                                        "label": "Swarm Name to Send To",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "wf_agent_name",
+                                                        "type": "text",
+                                                        "label": "Agent to masquerade as",
+                                                        "placeholder": "agent_name"
+                                                    },
+                                                    {
+                                                        "name": "wf_username",
+                                                        "type": "text",
+                                                        "label": "Username to masquerade as in messages",
+                                                        "placeholder": "agent_name"
+                                                    },
+                                                    {
+                                                        "name": "agent_parent_id",
+                                                        "type": "text",
+                                                        "label": "Parent/Manager of this Agent (leave blank if unknown)",
+                                                        "placeholder": ""
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            "success": [
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "jsonForm",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "results",
+                                            "arg": "__results__"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "app_services",
+                                    "isServer": true,
+                                    "args": {
+                                        "cmd": "start_app_diagram",
+                                        "pdclass": "chat_agent",
+                                        "pdalias": "",
+                                        "pddesc": "(${agent_parent_id}) CHAT ${agent_name}: ${agent_desc}",
+                                        "pdargs": "{\"config\": ${jsonForm} }"
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "res",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "results",
+                                            "arg": "__results__"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "app_services",
+                                    "isServer": false,
+                                    "args": {
+                                        "cmd": "show_app_diagram",
+                                        "pdalias": "${res}"
+                                    }
+                                }
+                            ],
+                            "failure": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "end",
+            "isServer": true,
+            "args": null
+        }
+    ],
+    "externalForms": {}
+}

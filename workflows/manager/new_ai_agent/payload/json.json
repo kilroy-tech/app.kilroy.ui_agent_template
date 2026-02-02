@@ -1,0 +1,319 @@
+{
+    "name": "kilroy.ui_agent_template/manager/new_ai_agent",
+    "version": "1",
+    "description": "",
+    "isInteractive": true,
+    "clean_up": true,
+    "inputs": [],
+    "outputs": [
+        "agent_*",
+        "ai_*"
+    ],
+    "args": {
+        "role": "*"
+    },
+    "steps": [
+        {
+            "operation": "set_value",
+            "isServer": true,
+            "args": {
+                "variable": "wfCleanupFlag",
+                "value": "1"
+            }
+        },
+        {
+            "operation": "step_group",
+            "isServer": true,
+            "args": {
+                "role": "*",
+                "message": "",
+                "timer": "24",
+                "isInteractive": true,
+                "canTerminate": true,
+                "success": [
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "value",
+                                "arg": {}
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_parent_id",
+                            "var_expr": {
+                                "type": "value",
+                                "arg": ""
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_rec_swarm",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "agent_rec_swarm"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_send_swarm",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "agent_send_swarm"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "ai_url",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "ai_url"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "ai_model",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "ai_model"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "ai_temperature",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "ai_temperature"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "ai_max_tokens",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "ai_max_tokens"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "ai_use_context",
+                            "var_expr": {
+                                "type": "value",
+                                "arg": false
+                            }
+                        }
+                    },
+                    {
+                        "operation": "display_inline_form",
+                        "isServer": false,
+                        "args": {
+                            "formID": "default",
+                            "form": {
+                                "formName": "LLM Agent Settings",
+                                "formDesc": "",
+                                "formPanels": [
+                                    {
+                                        "name": "Agent Info",
+                                        "description": "",
+                                        "sections": [
+                                            {
+                                                "fields": [
+                                                    {
+                                                        "name": "agent_name",
+                                                        "type": "text",
+                                                        "label": "LLM Agent Name",
+                                                        "placeholder": "simple_name_here"
+                                                    },
+                                                    {
+                                                        "name": "agent_desc",
+                                                        "type": "text",
+                                                        "label": "Description",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_rec_swarm",
+                                                        "type": "text",
+                                                        "label": "Listen to Swarm Name",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_from",
+                                                        "type": "text",
+                                                        "label": "Agent to Listen To",
+                                                        "placeholder": "from_agent"
+                                                    },
+                                                    {
+                                                        "name": "agent_send_swarm",
+                                                        "type": "text",
+                                                        "label": "Swarm Name to Send To",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_parent_id",
+                                                        "type": "text",
+                                                        "label": "Parent/Manager of this Agent (leave blank if unknown)",
+                                                        "placeholder": ""
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "LLM Info",
+                                        "description": "",
+                                        "sections": [
+                                            {
+                                                "fields": [
+                                                    {
+                                                        "name": "ai_url",
+                                                        "type": "text",
+                                                        "label": "Server URL",
+                                                        "placeholder": "http://"
+                                                    },
+                                                    {
+                                                        "name": "ai_model",
+                                                        "type": "text",
+                                                        "label": "Model",
+                                                        "placeholder": "llama3"
+                                                    },
+                                                    {
+                                                        "name": "ai_temperature",
+                                                        "type": "text",
+                                                        "label": "Temperature",
+                                                        "placeholder": "0.1"
+                                                    },
+                                                    {
+                                                        "name": "ai_max_tokens",
+                                                        "type": "text",
+                                                        "label": "Max Tokens",
+                                                        "placeholder": "4500"
+                                                    },
+                                                    {
+                                                        "name": "ai_system_prompt",
+                                                        "type": "textarea",
+                                                        "label": "System Prompt",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "ai_prompt_prefix",
+                                                        "type": "textarea",
+                                                        "label": "Prompt Prefix",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "ai_use_context",
+                                                        "type": "checkbox",
+                                                        "label": "Use AI Context"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            "success": [
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "jsonForm",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "results",
+                                            "arg": "__results__"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "app_services",
+                                    "isServer": true,
+                                    "args": {
+                                        "cmd": "start_app_diagram",
+                                        "pdclass": "ai_agent",
+                                        "pdalias": "",
+                                        "pddesc": "(${agent_parent_id}) AI ${agent_name}: ${agent_desc}",
+                                        "pdargs": "{\"config\": ${jsonForm} }"
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "res",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "results",
+                                            "arg": "__results__"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "app_services",
+                                    "isServer": false,
+                                    "args": {
+                                        "cmd": "show_app_diagram",
+                                        "pdalias": "${res}"
+                                    }
+                                }
+                            ],
+                            "failure": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "end",
+            "isServer": true,
+            "args": null
+        }
+    ],
+    "externalForms": {}
+}

@@ -1,0 +1,544 @@
+{
+    "name": "kilroy.ui_agent_template/manager/ui_create_pipeline",
+    "version": "1",
+    "description": "",
+    "isInteractive": true,
+    "clean_up": true,
+    "inputs": [],
+    "outputs": [
+        "agent_pipelines",
+        "msg"
+    ],
+    "args": {
+        "role": "*"
+    },
+    "steps": [
+        {
+            "operation": "set_value",
+            "isServer": true,
+            "args": {
+                "variable": "wfCleanupFlag",
+                "value": "1"
+            }
+        },
+        {
+            "operation": "step_group",
+            "isServer": true,
+            "args": {
+                "role": "*",
+                "message": "",
+                "timer": "24",
+                "isInteractive": true,
+                "canTerminate": true,
+                "success": [
+                    {
+                        "operation": "set_value",
+                        "isServer": true,
+                        "args": {
+                            "variable": "msg",
+                            "value": ""
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "class_abbrevs",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "json",
+                                "arg": {
+                                    "type": "value",
+                                    "arg": "{\"ai_agent\":\"AI\",\"wf_agent\":\"WF\",\"viewer_agent\":\"VIEWER\",\"chat_agent\":\"CHAT\"}"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "operation": "display_inline_form",
+                        "isServer": false,
+                        "args": {
+                            "formID": "default",
+                            "form": {
+                                "formPanels": [
+                                    {
+                                        "name": "Enter Pipeline JSON",
+                                        "description": "",
+                                        "sections": [
+                                            {
+                                                "fields": [
+                                                    {
+                                                        "name": "pipeline_json",
+                                                        "type": "textarea",
+                                                        "label": "Pipeline JSON",
+                                                        "placeholder": "{}"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            "success": [
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "pjson",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "json",
+                                            "arg": {
+                                                "type": "variable",
+                                                "arg": "pipeline_json"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "pipeline_name",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "object",
+                                            "arg": "pjson",
+                                            "field_name": "pipeline_name"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "pipeline_desc",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "object",
+                                            "arg": "pjson",
+                                            "field_name": "pipeline_desc"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "pipeline_uid",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "object",
+                                            "arg": "pjson",
+                                            "field_name": "pipeline_uid"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "agents",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "object",
+                                            "arg": "pjson",
+                                            "field_name": "agents"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "agents_len",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "array_length",
+                                            "arg": "agents"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "list_reset",
+                                    "isServer": true,
+                                    "args": {
+                                        "list_name": "aliases"
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "agents_by_alias",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "value",
+                                            "arg": {}
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "while_loop",
+                                    "isServer": true,
+                                    "args": {
+                                        "condition": "${agents_len} > 0",
+                                        "success": [
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "agent",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "array_shift",
+                                                        "arg": "agents"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "name",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "object",
+                                                        "arg": "agent",
+                                                        "field_name": "agent_name"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "class",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "object",
+                                                        "arg": "agent",
+                                                        "field_name": "agent_class"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "desc",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "object",
+                                                        "arg": "agent",
+                                                        "field_name": "agent_desc"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "alias",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "object",
+                                                        "arg": "agent",
+                                                        "field_name": "agent_alias"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "class_str",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "object",
+                                                        "arg": "class_abbrevs",
+                                                        "field_name": "${class}"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "if_then_else",
+                                                "isServer": true,
+                                                "args": {
+                                                    "condition": "\"${class}\" == \"viewer_agent\" || \"${class}\" == \"chat_agent\"",
+                                                    "success": [
+                                                        {
+                                                            "operation": "set_var_to",
+                                                            "isServer": true,
+                                                            "args": {
+                                                                "var_name": "diagram_alias",
+                                                                "push_array_name": null,
+                                                                "field_name": null,
+                                                                "var_expr": {
+                                                                    "type": "object",
+                                                                    "arg": "agent",
+                                                                    "field_name": "wf_diagram_alias"
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "operation": "trigger_pd",
+                                                            "isServer": true,
+                                                            "args": {
+                                                                "pd_id": "${diagram_alias}",
+                                                                "trigger_name": "create_${class}",
+                                                                "sync": true,
+                                                                "copyOutputs": false,
+                                                                "args": "{\"wfCurrentUserId\":\"${wfCurrentUserId}\",\"pipeline_name\":\"${pipeline_name}\",\"agent\": ${agent}}"
+                                                            }
+                                                        },
+                                                        {
+                                                            "operation": "set_var_to",
+                                                            "isServer": true,
+                                                            "args": {
+                                                                "var_name": "res",
+                                                                "push_array_name": null,
+                                                                "field_name": null,
+                                                                "var_expr": {
+                                                                    "type": "results",
+                                                                    "arg": "__results__"
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "operation": "if_then_else",
+                                                            "isServer": true,
+                                                            "args": {
+                                                                "condition": "\"${res}\" == \"${diagram_alias}\"",
+                                                                "success": [
+                                                                    {
+                                                                        "operation": "send_pubsub_cmd",
+                                                                        "isServer": true,
+                                                                        "args": {
+                                                                            "command": "ADMIN_ALERT",
+                                                                            "args": {
+                                                                                "message": "ERROR! ${class} not launched. ${diagram_alias} wasn't found (running).",
+                                                                                "jsonData": {
+                                                                                    "audio": "audio_error",
+                                                                                    "audio_url": ""
+                                                                                }
+                                                                            },
+                                                                            "topic": "admin_broadcast"
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "operation": "set_value",
+                                                                        "isServer": true,
+                                                                        "args": {
+                                                                            "variable": "msg",
+                                                                            "value": "${msg} \nERROR! ${class} not launched. ${diagram_alias} wasn't found (running)."
+                                                                        }
+                                                                    }
+                                                                ],
+                                                                "failure": []
+                                                            }
+                                                        }
+                                                    ],
+                                                    "failure": [
+                                                        {
+                                                            "operation": "app_services",
+                                                            "isServer": true,
+                                                            "args": {
+                                                                "cmd": "start_app_diagram",
+                                                                "pdclass": "${class}",
+                                                                "pdalias": "${alias}",
+                                                                "pddesc": "(${pipeline_name}) ${class_str}: ${name}: ${desc}",
+                                                                "pdargs": "{\"config\": ${agent}}"
+                                                            }
+                                                        },
+                                                        {
+                                                            "operation": "set_var_to",
+                                                            "isServer": true,
+                                                            "args": {
+                                                                "var_name": "res",
+                                                                "push_array_name": null,
+                                                                "field_name": null,
+                                                                "var_expr": {
+                                                                    "type": "results",
+                                                                    "arg": "__results__"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": null,
+                                                    "push_array_name": "aliases",
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "variable",
+                                                        "arg": "res"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "agents_by_alias",
+                                                    "push_array_name": null,
+                                                    "field_name": "${res}",
+                                                    "var_expr": {
+                                                        "type": "variable",
+                                                        "arg": "agent"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "agents_len",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "array_length",
+                                                        "arg": "agents"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "failure": []
+                                    }
+                                },
+                                {
+                                    "operation": "app_services",
+                                    "isServer": true,
+                                    "args": {
+                                        "cmd": "start_app_diagram",
+                                        "pdclass": "pipeline",
+                                        "pdalias": "kilroy.ai.pipeline.${pipeline_uid}",
+                                        "pddesc": " PIPELINE: ${pipeline_name} - ${pipeline_desc}",
+                                        "pdargs": "{\"pipeline_json\": ${pjson}, \"aliases\":${aliases}, \"agents_by_alias\":${agents_by_alias}}"
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "res",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "results",
+                                            "arg": "__results__"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "app_services",
+                                    "isServer": false,
+                                    "args": {
+                                        "cmd": "show_app_diagram",
+                                        "pdalias": "${res}"
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "display_order",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "object",
+                                            "arg": "pjson",
+                                            "field_name": "display_order"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "disp_len",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "array_length",
+                                            "arg": "display_order"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "while_loop",
+                                    "isServer": true,
+                                    "args": {
+                                        "condition": "${disp_len} > 0",
+                                        "success": [
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "alias",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "array_shift",
+                                                        "arg": "display_order"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "app_services",
+                                                "isServer": false,
+                                                "args": {
+                                                    "cmd": "show_app_diagram",
+                                                    "pdalias": "${alias}"
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "disp_len",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "array_length",
+                                                        "arg": "display_order"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "failure": []
+                                    }
+                                }
+                            ],
+                            "failure": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "end",
+            "isServer": true,
+            "args": null
+        }
+    ],
+    "externalForms": {}
+}

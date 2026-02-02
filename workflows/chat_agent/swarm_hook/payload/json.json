@@ -1,0 +1,343 @@
+{
+    "name": "kilroy.ui_agent_template/chat_agent/swarm_hook",
+    "version": "1",
+    "description": "",
+    "isInteractive": false,
+    "clean_up": true,
+    "inputs": [],
+    "outputs": [
+        "ta_msg"
+    ],
+    "args": {
+        "role": "*"
+    },
+    "steps": [
+        {
+            "operation": "set_value",
+            "isServer": true,
+            "args": {
+                "variable": "wfCleanupFlag",
+                "value": "1"
+            }
+        },
+        {
+            "operation": "step_group",
+            "isServer": true,
+            "args": {
+                "role": "*",
+                "message": "",
+                "timer": "24",
+                "isInteractive": false,
+                "canTerminate": false,
+                "success": [
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "data",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "json",
+                                "arg": {
+                                    "type": "object",
+                                    "arg": "webhook_args",
+                                    "field_name": "data"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "tweets",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "object",
+                                "arg": "data",
+                                "field_name": "args"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "from",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "object",
+                                "arg": "data",
+                                "field_name": "from"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "if_then_else",
+                        "isServer": true,
+                        "args": {
+                            "condition": "(\"${from}\" == \"${ta_agent_from}\") || (\"${ta_agent_from}\" == \"*\")",
+                            "success": [
+                                {
+                                    "operation": "set_value",
+                                    "isServer": true,
+                                    "args": {
+                                        "variable": "ta_msg",
+                                        "value": ""
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "tlen",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "array_length",
+                                            "arg": "tweets"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "i",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "value",
+                                            "arg": "0"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "while_loop",
+                                    "isServer": true,
+                                    "args": {
+                                        "condition": "${i}<${tlen}",
+                                        "success": [
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "tweet",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "array_shift",
+                                                        "arg": "tweets"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "username",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "object",
+                                                        "arg": "tweet",
+                                                        "field_name": "username"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "timestamp",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "object",
+                                                        "arg": "tweet",
+                                                        "field_name": "timestamp"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "timestamp",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "math",
+                                                        "operator": "multiply",
+                                                        "op_1": {
+                                                            "type": "variable",
+                                                            "arg": "timestamp"
+                                                        },
+                                                        "op_2": {
+                                                            "type": "value",
+                                                            "arg": "1000"
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "date",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "format_time",
+                                                        "arg": "h:mm:ss A, M/D/YY",
+                                                        "ticks": {
+                                                            "type": "variable",
+                                                            "arg": "timestamp"
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "text",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "object",
+                                                        "arg": "tweet",
+                                                        "field_name": "text"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "payload",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "value",
+                                                        "arg": {}
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "data",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "value",
+                                                        "arg": {}
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "data",
+                                                    "push_array_name": null,
+                                                    "field_name": "username",
+                                                    "var_expr": {
+                                                        "type": "variable",
+                                                        "arg": "username"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "data",
+                                                    "push_array_name": null,
+                                                    "field_name": "message",
+                                                    "var_expr": {
+                                                        "type": "variable",
+                                                        "arg": "text"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "payload",
+                                                    "push_array_name": null,
+                                                    "field_name": "data",
+                                                    "var_expr": {
+                                                        "type": "variable",
+                                                        "arg": "data"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "payload",
+                                                    "push_array_name": null,
+                                                    "field_name": "key",
+                                                    "var_expr": {
+                                                        "type": "value",
+                                                        "arg": "0"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "operation": "send_pubsub_cmd",
+                                                "isServer": true,
+                                                "args": {
+                                                    "command": "SHOW_MESSAGE",
+                                                    "args": "${payload}",
+                                                    "topic": "${pd_alias}"
+                                                }
+                                            },
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "i",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "math",
+                                                        "operator": "add",
+                                                        "op_1": {
+                                                            "type": "variable",
+                                                            "arg": "i"
+                                                        },
+                                                        "op_2": {
+                                                            "type": "value",
+                                                            "arg": "1"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "failure": []
+                                    }
+                                }
+                            ],
+                            "failure": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "end",
+            "isServer": true,
+            "args": null
+        }
+    ],
+    "externalForms": {}
+}

@@ -1,0 +1,318 @@
+{
+    "name": "kilroy.ui_agent_template/manager/new_wf_agent",
+    "version": "1",
+    "description": "",
+    "isInteractive": true,
+    "clean_up": true,
+    "inputs": [],
+    "outputs": [
+        "agent_*",
+        "wf_*"
+    ],
+    "args": {
+        "role": "*"
+    },
+    "steps": [
+        {
+            "operation": "set_value",
+            "isServer": true,
+            "args": {
+                "variable": "wfCleanupFlag",
+                "value": "1"
+            }
+        },
+        {
+            "operation": "step_group",
+            "isServer": true,
+            "args": {
+                "role": "*",
+                "message": "",
+                "timer": "24",
+                "isInteractive": true,
+                "canTerminate": true,
+                "success": [
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "value",
+                                "arg": {}
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_parent_id",
+                            "var_expr": {
+                                "type": "value",
+                                "arg": ""
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_rec_swarm",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "agent_rec_swarm"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_send_swarm",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "agent_send_swarm"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "wf_diagram_alias",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "wf_diagram_alias"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "wf_diagram_webhook",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "wf_diagram_webhook"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "wf_webhook_args",
+                            "var_expr": {
+                                "type": "value",
+                                "arg": "{}"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "wf_call_webhook",
+                            "var_expr": {
+                                "type": "value",
+                                "arg": false
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "wf_publish_results",
+                            "var_expr": {
+                                "type": "value",
+                                "arg": false
+                            }
+                        }
+                    },
+                    {
+                        "operation": "display_inline_form",
+                        "isServer": false,
+                        "args": {
+                            "formID": "default",
+                            "form": {
+                                "formName": "WF Agent Settings",
+                                "formDesc": "",
+                                "formPanels": [
+                                    {
+                                        "name": "Agent Info",
+                                        "description": "",
+                                        "sections": [
+                                            {
+                                                "fields": [
+                                                    {
+                                                        "name": "agent_name",
+                                                        "type": "text",
+                                                        "label": "WF Agent Name",
+                                                        "placeholder": "simple_name_here"
+                                                    },
+                                                    {
+                                                        "name": "agent_desc",
+                                                        "type": "text",
+                                                        "label": "Description",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_rec_swarm",
+                                                        "type": "text",
+                                                        "label": "Listen to Swarm Name",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_from",
+                                                        "type": "text",
+                                                        "label": "Agent to Listen To",
+                                                        "placeholder": "from_agent"
+                                                    },
+                                                    {
+                                                        "name": "agent_send_swarm",
+                                                        "type": "text",
+                                                        "label": "Swarm Name to Send To",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_parent_id",
+                                                        "type": "text",
+                                                        "label": "Parent/Manager of this Agent (leave blank if unknown)",
+                                                        "placeholder": ""
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "Workflow Info",
+                                        "description": "",
+                                        "sections": [
+                                            {
+                                                "fields": [
+                                                    {
+                                                        "name": "wf_agent_name",
+                                                        "type": "text",
+                                                        "label": "Agent to masquerade as",
+                                                        "placeholder": "agent_name"
+                                                    },
+                                                    {
+                                                        "name": "wf_username",
+                                                        "type": "text",
+                                                        "label": "Username to masquerade as in payloads",
+                                                        "placeholder": "agent_name"
+                                                    },
+                                                    {
+                                                        "name": "wf_diagram_alias",
+                                                        "type": "text",
+                                                        "label": "WF Diagram Alias",
+                                                        "placeholder": "kilroy.ai.webhooks"
+                                                    },
+                                                    {
+                                                        "name": "wf_diagram_webhook",
+                                                        "type": "text",
+                                                        "label": "WF Diagram Webhook",
+                                                        "placeholder": "some_hook"
+                                                    },
+                                                    {
+                                                        "name": "wf_webhook_args",
+                                                        "type": "text",
+                                                        "label": "Additional JSON args to webhook",
+                                                        "placeholder": "{}"
+                                                    },
+                                                    {
+                                                        "name": "wf_call_webhook",
+                                                        "type": "checkbox",
+                                                        "label": "Call the Webhook?"
+                                                    },
+                                                    {
+                                                        "name": "wf_publish_results",
+                                                        "type": "checkbox",
+                                                        "label": "Send Webhook results to swarm?"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            "success": [
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "jsonForm",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "results",
+                                            "arg": "__results__"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "app_services",
+                                    "isServer": true,
+                                    "args": {
+                                        "cmd": "start_app_diagram",
+                                        "pdclass": "wf_agent",
+                                        "pdalias": "",
+                                        "pddesc": "(${agent_parent_id}) WF ${agent_name}: ${agent_desc}",
+                                        "pdargs": "{\"config\": ${jsonForm} }"
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "res",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "results",
+                                            "arg": "__results__"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "app_services",
+                                    "isServer": false,
+                                    "args": {
+                                        "cmd": "show_app_diagram",
+                                        "pdalias": "${res}"
+                                    }
+                                }
+                            ],
+                            "failure": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "end",
+            "isServer": true,
+            "args": null
+        }
+    ],
+    "externalForms": {}
+}

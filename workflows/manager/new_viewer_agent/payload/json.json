@@ -1,0 +1,393 @@
+{
+    "name": "kilroy.ui_agent_template/manager/new_viewer_agent",
+    "version": "1",
+    "description": "",
+    "isInteractive": true,
+    "clean_up": true,
+    "inputs": [],
+    "outputs": [
+        "agent_.*",
+        "ex_.*"
+    ],
+    "args": {
+        "role": "*"
+    },
+    "steps": [
+        {
+            "operation": "set_value",
+            "isServer": true,
+            "args": {
+                "variable": "wfCleanupFlag",
+                "value": "1"
+            }
+        },
+        {
+            "operation": "step_group",
+            "isServer": true,
+            "args": {
+                "role": "*",
+                "message": "",
+                "timer": "24",
+                "isInteractive": true,
+                "canTerminate": true,
+                "success": [
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": null,
+                            "var_expr": {
+                                "type": "value",
+                                "arg": {}
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_parent_id",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "agent_parent_id"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_name",
+                            "var_expr": {
+                                "type": "value",
+                                "arg": ""
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_desc",
+                            "var_expr": {
+                                "type": "value",
+                                "arg": ""
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_rec_swarm",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "agent_rec_swarm"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_from",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "agent_from"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_style",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "ex_style"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_width",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "agent_width"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "set_var_to",
+                        "isServer": true,
+                        "args": {
+                            "var_name": "formData",
+                            "push_array_name": null,
+                            "field_name": "agent_height",
+                            "var_expr": {
+                                "type": "variable",
+                                "arg": "agent_height"
+                            }
+                        }
+                    },
+                    {
+                        "operation": "display_inline_form",
+                        "isServer": false,
+                        "args": {
+                            "formID": "default",
+                            "form": {
+                                "formPanels": [
+                                    {
+                                        "name": "Configure New Viewer...",
+                                        "description": "",
+                                        "sections": [
+                                            {
+                                                "fields": [
+                                                    {
+                                                        "name": "agent_parent_id",
+                                                        "type": "text",
+                                                        "label": "Parent ID (leave blank if unknown)",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_name",
+                                                        "type": "text",
+                                                        "label": "Viewer Name",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_desc",
+                                                        "type": "text",
+                                                        "label": "Viewer Description",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_style",
+                                                        "type": "dropdown",
+                                                        "label": "Style",
+                                                        "pairs_as_string": true,
+                                                        "pairs": "[  {\"name\" : \"Light\", \"value\" : 0 },{\"name\" : \"Dark\", \"value\" : 1 },{\"name\" : \"Dim\", \"value\" : 2 },{\"name\" : \"Blueprint\", \"value\" : 3 }]"
+                                                    },
+                                                    {
+                                                        "name": "agent_width",
+                                                        "type": "text",
+                                                        "label": "Viewer Width (>=256)",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_height",
+                                                        "type": "text",
+                                                        "label": "Viewer Height (>=128)",
+                                                        "placeholder": ""
+                                                    },
+                                                    {
+                                                        "name": "agent_rec_swarm",
+                                                        "type": "text",
+                                                        "label": "Swarm to subscribe to",
+                                                        "placeholder": "swarm_name"
+                                                    },
+                                                    {
+                                                        "name": "agent_from",
+                                                        "type": "text",
+                                                        "label": "Agent Name to listen for",
+                                                        "placeholder": "some_agent_name"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            "success": [
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "jsonForm",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "results",
+                                            "arg": "__results__"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "agent_width",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "math",
+                                            "operator": "multiply",
+                                            "op_1": {
+                                                "type": "variable",
+                                                "arg": "agent_width"
+                                            },
+                                            "op_2": {
+                                                "type": "value",
+                                                "arg": "1"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "agent_height",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "math",
+                                            "operator": "multiply",
+                                            "op_1": {
+                                                "type": "variable",
+                                                "arg": "agent_height"
+                                            },
+                                            "op_2": {
+                                                "type": "value",
+                                                "arg": "1"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "if_then_else",
+                                    "isServer": true,
+                                    "args": {
+                                        "condition": "${agent_height} < 128",
+                                        "success": [
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "agent_height",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "value",
+                                                        "arg": "128"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "failure": []
+                                    }
+                                },
+                                {
+                                    "operation": "if_then_else",
+                                    "isServer": true,
+                                    "args": {
+                                        "condition": "${agent_width} < 256",
+                                        "success": [
+                                            {
+                                                "operation": "set_var_to",
+                                                "isServer": true,
+                                                "args": {
+                                                    "var_name": "agent_width",
+                                                    "push_array_name": null,
+                                                    "field_name": null,
+                                                    "var_expr": {
+                                                        "type": "value",
+                                                        "arg": "256"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "failure": []
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "jsonForm",
+                                        "push_array_name": null,
+                                        "field_name": "agent_width",
+                                        "var_expr": {
+                                            "type": "variable",
+                                            "arg": "agent_width"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "jsonForm",
+                                        "push_array_name": null,
+                                        "field_name": "agent_height",
+                                        "var_expr": {
+                                            "type": "variable",
+                                            "arg": "agent_height"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "app_services",
+                                    "isServer": true,
+                                    "args": {
+                                        "cmd": "start_app_diagram",
+                                        "pdclass": "viewer_agent",
+                                        "pdalias": "",
+                                        "pddesc": "(${agent_parent_id}) VIEWER ${agent_name}: ${agent_desc}",
+                                        "pdargs": "{\"config\": ${jsonForm} }"
+                                    }
+                                },
+                                {
+                                    "operation": "set_var_to",
+                                    "isServer": true,
+                                    "args": {
+                                        "var_name": "res",
+                                        "push_array_name": null,
+                                        "field_name": null,
+                                        "var_expr": {
+                                            "type": "results",
+                                            "arg": "__results__"
+                                        }
+                                    }
+                                },
+                                {
+                                    "operation": "app_services",
+                                    "isServer": false,
+                                    "args": {
+                                        "cmd": "show_app_diagram",
+                                        "pdalias": "${res}"
+                                    }
+                                }
+                            ],
+                            "failure": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "operation": "end",
+            "isServer": true,
+            "args": null
+        }
+    ],
+    "externalForms": {}
+}
